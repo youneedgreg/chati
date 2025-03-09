@@ -1,22 +1,25 @@
-🧠 Mental Health Chatbot with Games Corner and journalling center🎮
+# 🧠 Mental Health Chatbot with Games Corner and journalling center🎮
 A compassionate AI-powered chatbot designed to support users facing mental health challenges. It provides empathetic conversations, mood tracking, journal and a Games Corner with interactive activities to help users cope with distress.
 
-✨ Features
+# ✨ Features
 ✅ AI Chatbot for Mental Health – Offers supportive conversations, coping strategies, and self-care advice.
 ✅ Games Corner – Includes puzzles, memory games, breath exercises, and creative activities to reduce stress.
 ✅ Mood Tracking – Users can log emotions and track mental health trends.
 ✅ Journal – Users can journal their feelings regularly.
 ✅ Emergency Support – Redirects users to professional help when needed.
 ✅ Privacy & Security – Ensures anonymous chat and secure data storage.
+# process
 
-🛠️ Tech Stack
+
+
+# 🛠️ Tech Stack
 Frontend: Next.js, Tailwind CSS, React
 Backend: Node.js, Express, MongoDB / PostgreSQL
 AI Engine: Mastra AI / OpenAI GPT API
 Game Framework: Phaser.js, React Canvas
 Security: SSL/TLS, OAuth 2.0, JWT
 
-💻 Development Roadmap
+# 💻 Development Roadmap
 1. Develop AI Chatbot with Mastra AI / OpenAI GPT API
 2. Implement Games Corner with Phaser.js and React Canvas
 3. Integrate Mood Tracking and Journal features
@@ -28,16 +31,16 @@ Security: SSL/TLS, OAuth 2.0, JWT
 9. Add more engaging games
 10. Implement daily affirmations & journaling
 
-👥 Target Audience
+# 👥 Target Audience
 Individuals facing mental health challenges
 Mental health professionals and organizations
 Schools and universities for student support
 
-📊 Business Model
+# 📊 Business Model
 Advertising revenue from non-intrusive, relevant ads
 Partnerships with mental health organizations for co-branding and co-funding
 
-💸 Revenue Stream
+# 💸 Revenue Stream
 Advertising revenue
 Partnership revenue
 Grants and funding from mental health organizations
@@ -54,7 +57,7 @@ Licensing and royalties
 Sponsored events and webinars
 Co-branded events and conferences
 
-📈 Growth Strategy
+# 📈 Growth Strategy
 1. Develop strategic partnerships with mental health organizations
 2. Leverage social media and online advertising
 3. Collaborate with influencers and content creators
@@ -84,6 +87,3 @@ Co-branded events and conferences
 27. Host a mental health-focused webinar or workshop
 28. Develop a mental health-focused online community or forum
 29. Offer a free mental health resource or guide
-
-📜 License
-This project is licensed under the MIT License.
