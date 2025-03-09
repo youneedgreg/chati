@@ -24,9 +24,9 @@ Security: SSL/TLS, OAuth 2.0, JWT
 5. Implement Privacy & Security measures
 6. Conduct user testing and feedback
 7. Launch and maintain the platform
- Improve chatbot responses with NLP tuning
- Add more engaging games
- Implement daily affirmations & journaling
+8. Improve chatbot responses with NLP tuning
+9. Add more engaging games
+10. Implement daily affirmations & journaling
 
 👥 Target Audience
 Individuals facing mental health challenges
@@ -34,12 +34,10 @@ Mental health professionals and organizations
 Schools and universities for student support
 
 📊 Business Model
-Subscription-based model for access to premium features
 Advertising revenue from non-intrusive, relevant ads
 Partnerships with mental health organizations for co-branding and co-funding
 
 💸 Revenue Stream
-Subscription fees
 Advertising revenue
 Partnership revenue
 Grants and funding from mental health organizations
