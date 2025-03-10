@@ -59,11 +59,13 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <img
-                src="/placeholder.svg?height=200&width=400"
-                alt="Illustration of mood tracking charts"
-                className="rounded-md w-full h-48 object-cover mb-4"
-              />
+            <Image
+            src="/chatimood.png"
+            alt="Chat Interface"
+            width={400}
+            height={200}
+            className="rounded-md w-full h-48 object-cover mb-4"
+            />
               <p className="text-muted-foreground">
                 Record your daily moods and visualize patterns over time to better understand your emotional health.
               </p>
@@ -86,11 +88,13 @@ export default function Home() {
               <CardDescription>Express yourself through guided journaling prompts</CardDescription>
             </CardHeader>
             <CardContent>
-              <img
-                src="/placeholder.svg?height=200&width=400"
-                alt="Illustration of a journal"
-                className="rounded-md w-full h-48 object-cover mb-4"
-              />
+            <Image
+            src="/chatijournal.png"
+            alt="Chat Interface"
+            width={400}
+            height={200}
+            className="rounded-md w-full h-48 object-cover mb-4"
+            />
               <p className="text-muted-foreground">
                 Write about your experiences, thoughts, and feelings with helpful prompts to guide your reflection.
               </p>
@@ -115,11 +119,13 @@ export default function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <img
-                src="/placeholder.svg?height=200&width=400"
-                alt="Illustration of games and activities"
-                className="rounded-md w-full h-48 object-cover mb-4"
-              />
+            <Image
+            src="/chatigame.png"
+            alt="Chat Interface"
+            width={400}
+            height={200}
+            className="rounded-md w-full h-48 object-cover mb-4"
+            />
               <p className="text-muted-foreground">
                 Play simple games and activities that can help redirect your focus and provide comfort during difficult
                 moments.
