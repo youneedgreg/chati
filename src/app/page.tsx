@@ -9,8 +9,8 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50">
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-primary mb-3">CHATI</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="text-6xl font-bold text-primary mb-3">CHATI</h1>
+          <p className="text-3xl text-muted-foreground max-w-2xl mx-auto">
             A compassionate AI-powered companion to support your mental wellbeing journey
           </p>
         </header>
@@ -41,9 +41,10 @@ export default function Home() {
             </CardContent>
             <CardFooter>
               <Link href="/chat" className="w-full">
-                <Button className="w-full">
-                  Start Chatting <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+              <Button className="w-full bg-black text-white hover:bg-black/90">
+               Start Chatting <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+
               </Link>
             </CardFooter>
           </Card>
@@ -72,9 +73,9 @@ export default function Home() {
             </CardContent>
             <CardFooter>
               <Link href="/mood-tracker" className="w-full">
-                <Button className="w-full">
-                  Track Mood <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+              <Button className="w-full bg-black text-white hover:bg-black/90">
+               Track Mood <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
               </Link>
             </CardFooter>
           </Card>
@@ -101,9 +102,9 @@ export default function Home() {
             </CardContent>
             <CardFooter>
               <Link href="/journal" className="w-full">
-                <Button className="w-full">
-                  Open Journal <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Button className="w-full bg-black text-white hover:bg-black/90">
+               Open Journal <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
               </Link>
             </CardFooter>
           </Card>
@@ -133,9 +134,9 @@ export default function Home() {
             </CardContent>
             <CardFooter>
               <Link href="/games" className="w-full">
-                <Button className="w-full">
-                  Play Games <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+              <Button className="w-full bg-black text-white hover:bg-black/90">
+               Play Games <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
               </Link>
             </CardFooter>
           </Card>
