@@ -140,3 +140,9 @@ Technical Implementation Ideas
 🔹 Display personalized suggestions based on journal entries & chat topics.
 
 Would you like help with the backend logic or UI design for this? 🚀
+
+# changes
+homepage- put the chat as the default landing page
+overlap select- on the journal..the select is transparent
+slider color-the slider doesnt show
+your stats overlap- the stats are transparent
