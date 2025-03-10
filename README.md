@@ -9,12 +9,13 @@ A compassionate AI-powered chatbot designed to support users facing mental healt
 ✅ Emergency Support – Redirects users to professional help when needed.
 ✅ Privacy & Security – Ensures anonymous chat and secure data storage.
 # process
-
+research on available projects such as this to know and anticipate challenges.
 
 
 # 🛠️ Tech Stack
 Frontend: Next.js, Tailwind CSS, React
 Backend: Node.js, Express, MongoDB / PostgreSQL
+Auth:??
 AI Engine: Mastra AI / OpenAI GPT API
 Game Framework: Phaser.js, React Canvas
 Security: SSL/TLS, OAuth 2.0, JWT
