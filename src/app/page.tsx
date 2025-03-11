@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, MessageCircle, Gamepad2, BookOpen, BarChart2 } from "lucide-react";
-import Link from "next/link";
+import {  MessageCircle, Gamepad2, BookOpen, BarChart2 } from "lucide-react";
 
 // Import our component functions
 import { ChatComponent, GamesComponent, JournalComponent, MoodTrackerComponent } from "./../components/components";
