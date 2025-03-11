@@ -218,7 +218,7 @@ export function GamesComponent() {
               Your Stats
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md rounded-xl">
+          <DialogContent className="max-w-md rounded-xl bg-white">
             <DialogHeader>
               <DialogTitle>Your Wellness Game Stats</DialogTitle>
               <DialogDescription>
@@ -509,13 +509,14 @@ function BreathingExercise({ onSessionComplete }) {
                 <span className="text-sm">{breathingRate} seconds</span>
               </div>
               <Slider
-                value={[breathingRate]}
-                min={2}
-                max={8}
-                step={1}
-                onValueChange={(value) => setBreathingRate(value[0])}
-                disabled={isActive}
-              />
+  value={[breathingRate]}
+  min={2}
+  max={8}
+  step={1}
+  onValueChange={(value) => setBreathingRate(value[0])}
+  disabled={isActive}
+  className="py-1 [&>span]:bg-black [&>span>span]:bg-black [&>span>span>span]:bg-black"
+/>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Shorter</span>
                 <span>Longer</span>
@@ -1277,7 +1278,7 @@ export function JournalComponent() {
                     <SelectTrigger className="border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20">
                       <SelectValue placeholder="Select a prompt or write freely" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className={"bg-white"}>
                       <SelectItem value="none">Write freely</SelectItem>
                       {JOURNAL_PROMPTS.map((prompt, index) => (
                         <SelectItem key={index} value={prompt}>
