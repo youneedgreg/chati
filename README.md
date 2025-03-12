@@ -144,3 +144,7 @@ Would you like help with the backend logic or UI design for this? 🚀
 # changes
 components split
 dark mode
+favicon and title
+perfomance vercel tweaks
+auth
+try neon
