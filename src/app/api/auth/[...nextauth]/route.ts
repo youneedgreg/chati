@@ -1,12 +1,11 @@
-import { NextAuthOptions } from "next-auth";
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
@@ -22,7 +21,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Please enter email and password");
         }
 
-        // Find user in DB
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
@@ -31,22 +29,18 @@ export const authOptions: NextAuthOptions = {
           throw new Error("No user found");
         }
 
-        // Compare password
         const isValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isValid) {
           throw new Error("Invalid credentials");
         }
 
-        return {
-          id: user.id,
-          email: user.email,
-        };
+        return { id: user.id, email: user.email };
       },
     }),
   ],
   pages: {
-    signIn: "/login", // if you want a custom login page
+    signIn: "/login",
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -62,8 +56,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET, // from your .env
-};
+  secret: process.env.NEXTAUTH_SECRET,
+});
 
-const handler = NextAuth(authOptions);
+// ✅ Correct Next.js API Route Export for App Router
 export { handler as GET, handler as POST };

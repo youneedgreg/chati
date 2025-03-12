@@ -12,10 +12,6 @@ A compassionate AI-powered chatbot designed to support users facing mental healt
 ✅ Loader
 
 
-# process
-research on available projects such as this to know and anticipate challenges.
-
-
 # 🛠️ Tech Stack
 Frontend: Next.js, Tailwind CSS, React
 Backend: Node.js, Express, MongoDB / PostgreSQL
@@ -40,10 +36,6 @@ Security: SSL/TLS, OAuth 2.0, JWT
 Individuals facing mental health challenges
 Mental health professionals and organizations
 Schools and universities for student support
-
-# 📊 Business Model
-Advertising revenue from non-intrusive, relevant ads
-Partnerships with mental health organizations for co-branding and co-funding
 
 # 💸 Revenue Stream
 Advertising revenue
