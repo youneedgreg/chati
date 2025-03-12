@@ -33,6 +33,7 @@ export default function SignupPage() {
 
       // If signup is successful, redirect to login or directly sign in
       router.push("/login");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
     }
