@@ -148,3 +148,7 @@ favicon and title
 perfomance vercel tweaks
 auth
 try neon
+typescript
+thunderclient
+tabs stick
+comp ui
