@@ -1,11 +1,19 @@
-import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-const handler = NextAuth({
+interface SessionUser  {
+  id: string;
+  name?: string | null | undefined;
+  email?: string | null | undefined;
+  image?: string | null | undefined;
+}
+
+const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -21,6 +29,7 @@ const handler = NextAuth({
           throw new Error("Please enter email and password");
         }
 
+        // Find user in DB
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
@@ -29,18 +38,22 @@ const handler = NextAuth({
           throw new Error("No user found");
         }
 
+        // Compare password
         const isValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isValid) {
           throw new Error("Invalid credentials");
         }
 
-        return { id: user.id, email: user.email };
+        return {
+          id: user.id,
+          email: user.email,
+        };
       },
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/login", // if you want a custom login page
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -50,14 +63,14 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id;
+      if (token && token.id) {
+        session.user = { ...session.user, id: token.id } as SessionUser ;
       }
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
-});
+  secret: process.env.NEXTAUTH_SECRET, // from your .env
+};
 
-// ✅ Correct Next.js API Route Export for App Router
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

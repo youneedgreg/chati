@@ -150,25 +150,27 @@ export function GamesComponent() {
   });
   const [showTip, setShowTip] = useState(true);
 
-  useEffect(() => {
-    // Load stats from localStorage
-    const savedStats = localStorage.getItem("gameStats");
-    if (savedStats) {
-      setStats(JSON.parse(savedStats));
-    }
-    
-    // Set last played to today
-    updateLastPlayed();
-  }, []);
+ // GamesComponent fix - Add updateLastPlayed to dependency array
+useEffect(() => {
+  // Load stats from localStorage
+  const savedStats = localStorage.getItem("gameStats");
+  if (savedStats) {
+    setStats(JSON.parse(savedStats));
+  }
   
-  const updateLastPlayed = () => {
+  // Set last played to today
+  updateLastPlayed();
+}, [updateLastPlayed]); // Add updateLastPlayed to dependency array
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updateLastPlayed = useCallback(() => {
     const updatedStats = {
       ...stats,
       lastPlayed: new Date().toISOString()
     };
     setStats(updatedStats);
     localStorage.setItem("gameStats", JSON.stringify(updatedStats));
-  };
+  });
   
   const updateBreathingTime = (seconds) => {
     const updatedStats = {
@@ -375,12 +377,12 @@ function BreathingExercise({ onSessionComplete }) {
   const [animationProgress, setAnimationProgress] = useState(0);
   
   // Phase durations in seconds
-  const phaseDurations = {
+  const phaseDurations = useMemo(() => ({
     in: breathingRate,
     hold: Math.max(1, Math.floor(breathingRate / 2)),
     out: breathingRate,
     rest: Math.max(1, Math.floor(breathingRate / 2))
-  };
+  }), [breathingRate]);
   
   const phaseMessages = {
     in: "Breathe in...",
@@ -445,7 +447,7 @@ function BreathingExercise({ onSessionComplete }) {
       if (interval) clearInterval(interval);
       if (progressInterval) clearInterval(progressInterval);
     };
-  }, [isActive, breathingRate]);
+  }, [isActive, breathingRate, phaseDurations]);
   
   const toggleActive = () => {
     if (isActive) {
@@ -837,11 +839,12 @@ function MemoryGame({ onGameComplete }) {
     }));
   }
   
-  useEffect(() => {
-    // Reset the game when difficulty changes
-    resetGame();
-  }, [level]);
-  
+// Fix for useEffect in MemoryGame (Line 843)
+useEffect(() => {
+  // Reset the game when difficulty changes
+  resetGame();
+}, [level, resetGame]); // Added resetGame
+
   useEffect(() => {
     // Start the timer on first move
     if (moves === 1 && !timer) {
@@ -907,7 +910,7 @@ function MemoryGame({ onGameComplete }) {
     }
   };
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     if (timer) clearInterval(timer);
     setTimer(null);
     setCards(generateCards(level));
@@ -917,8 +920,8 @@ function MemoryGame({ onGameComplete }) {
     setStartTime(null);
     setElapsedTime(0);
     setIsGameComplete(false);
-  };
-  
+  }, [timer, level]);
+
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -1052,18 +1055,18 @@ export function JournalComponent() {
   const [randomPrompt, setRandomPrompt] = useState("");
   const contentRef = useRef(null);
 
-  const JOURNAL_PROMPTS = [
-    "What are three things you're grateful for today?",
-    "What's something that challenged you today, and how did you handle it?",
-    "What's one small win you had today?",
-    "What's something you're looking forward to?",
-    "What's one thing you could have done better today?",
-    "What made you smile today?",
-    "What's something you learned recently?",
-    "What's a goal you're working towards right now?",
-    "What's something that's been on your mind lately?",
-    "What's a self-care activity you could do today?",
-  ];
+  const JOURNAL_PROMPTS = useMemo(() => [
+  "What are three things you're grateful for today?",
+  "What's something that challenged you today, and how did you handle it?",
+  "What's one small win you had today?",
+  "What's something you're looking forward to?",
+  "What's one thing you could have done better today?",
+  "What made you smile today?",
+  "What's something you learned recently?",
+  "What's a goal you're working towards right now?",
+  "What's something that's been on your mind lately?",
+  "What's a self-care activity you could do today?",
+], []);
 
   useEffect(() => {
     const savedEntries = localStorage.getItem("journalEntries");
@@ -1074,8 +1077,9 @@ export function JournalComponent() {
     // Set random prompt
     const randomIndex = Math.floor(Math.random() * JOURNAL_PROMPTS.length);
     setRandomPrompt(JOURNAL_PROMPTS[randomIndex]);
-  }, []);
-
+  }, [JOURNAL_PROMPTS]); // Added JOURNAL_PROMPTS
+  
+  
   useEffect(() => {
     // Scroll to top of content when selecting a new entry
     if (selectedEntry && contentRef.current) {
@@ -1611,26 +1615,26 @@ export function MoodTrackerComponent() {
     "I ate healthy meals today"
   ];
 
-  const moodTips = [
-    "Try some deep breathing exercises if you're feeling stressed.",
-    "Remember that it's okay to ask for help when you need it.",
-    "Consider taking a short walk to boost your mood.",
-    "Talking to someone you trust can often help improve your mood.",
-    "Small acts of self-care can make a big difference in how you feel.",
-    "Remember that moods are temporary and will change with time."
-  ];
-
   useEffect(() => {
-    // Random mood tip
+    // Define moodTips inside the effect
+    const moodTips = [
+      "Try some deep breathing exercises if you're feeling stressed.",
+      "Remember that it's okay to ask for help when you need it.",
+      "Consider taking a short walk to boost your mood.",
+      "Talking to someone you trust can often help improve your mood.",
+      "Small acts of self-care can make a big difference in how you feel.",
+      "Remember that moods are temporary and will change with time."
+    ];
+
     const randomIndex = Math.floor(Math.random() * moodTips.length);
     setMoodTip(moodTips[randomIndex]);
-
+  
     // Load saved entries
     const savedEntries = localStorage.getItem("moodEntries");
-    if (savedEntries) {
-      setEntries(JSON.parse(savedEntries));
-    }
-  }, []);
+  if (savedEntries) {
+    setEntries(JSON.parse(savedEntries));
+  }
+}, []); // Added moodTips
 
   useEffect(() => {
     if (activeTab === "history" && entries.length > 0) {

@@ -143,3 +143,4 @@ thunderclient
 tabs stick
 comp ui
 history and chats and journal auth
+database double fix
