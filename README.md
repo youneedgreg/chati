@@ -139,7 +139,6 @@ dark mode
 favicon and title
 perfomance vercel tweaks
 typescript
-thunderclient
 tabs stick
 comp ui
 history and chats and journal auth
