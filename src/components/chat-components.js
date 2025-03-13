@@ -1,14 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Send } from "lucide-react";
 
-export function ChatComponent() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+// Initial messages for different topics
+const topicMessages = {
+  "anxiety": "I'd like to discuss managing anxiety in daily life.",
+  "procrastination": "I keep putting things off. Can you help me stop procrastinating?",
+  "plant-therapy": "I'm interested in using plants for mindfulness and mental health. Any advice?",
+  "sleep": "I'm having trouble sleeping. Do you have any sleep hygiene tips?",
+  "wellness-trends": "What are the latest health and wellness trends of 2024?",
+};
+
+export function ChatComponent({ activeTopic = null }) {
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
     initialMessages: [
       {
         id: "welcome-message",
@@ -19,6 +28,36 @@ export function ChatComponent() {
   });
 
   const messagesEndRef = useRef(null);
+  const [topicLoaded, setTopicLoaded] = useState(null);
+
+  // Handle topic changes
+  useEffect(() => {
+    if (activeTopic && activeTopic !== topicLoaded && topicMessages[activeTopic]) {
+      // Add user message for the selected topic
+      const newUserMessage = {
+        id: `topic-${activeTopic}`,
+        role: "user",
+        content: topicMessages[activeTopic]
+      };
+      
+      // Add assistant response acknowledging the topic
+      const newAssistantMessage = {
+        id: `response-${activeTopic}`,
+        role: "assistant",
+        content: `I'd be happy to chat about ${activeTopic.replace(/-/g, ' ')}. What specific aspects would you like to explore?`
+      };
+      
+      // Set the messages with the new topic
+      setMessages([
+        messages[0], // Keep the welcome message
+        newUserMessage,
+        newAssistantMessage
+      ]);
+      
+      // Mark this topic as loaded
+      setTopicLoaded(activeTopic);
+    }
+  }, [activeTopic, topicLoaded, messages, setMessages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,7 +101,7 @@ export function ChatComponent() {
           <Input
             value={input}
             onChange={handleInputChange}
-            placeholder="Talk to chati..."
+            placeholder="Type your message here..."
             className="flex-1 border border-gray-300 shadow-sm rounded-full px-4 py-2"
             disabled={isLoading}
           />

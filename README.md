@@ -135,6 +135,8 @@ Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
 comp ui
+user session
+chati talk to 
 ai integration
 typescript
 dark mode
