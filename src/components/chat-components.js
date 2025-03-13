@@ -16,7 +16,7 @@ const topicMessages = {
   "wellness-trends": "What are the latest health and wellness trends of 2024?",
 };
 
-export function ChatComponent({ activeTopic = null }) {
+export function ChatComponent({ activeTopic }) {
   const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
     initialMessages: [
       {

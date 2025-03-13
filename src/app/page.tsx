@@ -122,7 +122,7 @@ const MobileFeaturedTopics = ({ topics, onTopicClick }: MobileFeaturedTopicsProp
 export default function ChatiApp() {
   const [activeTab, setActiveTab] = useState<TabType>("chat");
   const [, setIsMobile] = useState<boolean>(false);
-  const [activeTopic, setActiveTopic] = useState<string | null>(null);
+  const [activeTopic, setActiveTopic] = useState<string | undefined>();
   const [greeting, setGreeting] = useState<string>("");
   const [showMobileChat, setShowMobileChat] = useState<boolean>(false);
   
