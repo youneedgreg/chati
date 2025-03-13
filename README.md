@@ -134,15 +134,14 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
+potrait ipad
 comp ui
 user session
 chati talk to 
-ai integration
 typescript
 dark mode
 favicon and title
 perfomance vercel tweaks
-tabs stick
 history and chats and journal auth
 database double fix
 brainstorm ideas
@@ -152,7 +151,8 @@ learn something new
 ![alt text](image-2.png)
 shamiri instagram post integration
 loaders
-memory game
+history chat
+back to auth
 mobbin.com
 database connect
 

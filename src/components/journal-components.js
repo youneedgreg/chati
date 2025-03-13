@@ -43,7 +43,6 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export function JournalComponent() {
-  // Rest of the component remains the same
   const [entries, setEntries] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState("");
@@ -91,251 +90,252 @@ export function JournalComponent() {
     }
   }, [selectedEntry]);
   
-    const getFilteredEntries = () => {
-      let filteredEntries = [...entries];
-      
-      // Filter by search query
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        filteredEntries = filteredEntries.filter(
-          entry => 
-            entry.title.toLowerCase().includes(query) || 
-            entry.content.toLowerCase().includes(query)
-        );
-      }
-      
-      // Filter by tab
-      if (activeTab === "favorites") {
-        filteredEntries = filteredEntries.filter(entry => entry.favorite);
-      } else if (activeTab === "recent") {
-        // Get entries from the last 7 days
-        const lastWeek = new Date();
-        lastWeek.setDate(lastWeek.getDate() - 7);
-        filteredEntries = filteredEntries.filter(
-          entry => new Date(entry.date) >= lastWeek
-        );
-      }
-      
-      // Sort by date (newest first)
-      return filteredEntries.sort((a, b) => 
-        new Date(b.date).getTime() - new Date(a.date).getTime()
+  const getFilteredEntries = () => {
+    let filteredEntries = [...entries];
+    
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filteredEntries = filteredEntries.filter(
+        entry => 
+          entry.title.toLowerCase().includes(query) || 
+          entry.content.toLowerCase().includes(query)
       );
-    };
-  
-    const saveEntry = () => {
-      let updatedEntries;
-  
-      if (editMode) {
-        updatedEntries = entries.map((entry) => (entry.id === currentEntry.id ? currentEntry : entry));
-      } else {
-        updatedEntries = [
-          ...entries,
-          {
-            ...currentEntry,
-            id: Date.now().toString(),
-            prompt: selectedPrompt || undefined,
-          },
-        ];
-      }
-  
-      setEntries(updatedEntries);
-      localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
-      resetForm();
-      
-      // Select the newly created entry if not in edit mode
-      if (!editMode) {
-        const newEntry = updatedEntries[updatedEntries.length - 1];
-        setSelectedEntry(newEntry);
-      }
-    };
-  
-    const deleteEntry = (id) => {
-      const updatedEntries = entries.filter((entry) => entry.id !== id);
-      setEntries(updatedEntries);
-      localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
-      setSelectedEntry(null);
-    };
-  
-    const toggleFavorite = (id) => {
-      const updatedEntries = entries.map(entry => 
-        entry.id === id 
-          ? { ...entry, favorite: !entry.favorite }
-          : entry
+    }
+    
+    // Filter by tab
+    if (activeTab === "favorites") {
+      filteredEntries = filteredEntries.filter(entry => entry.favorite);
+    } else if (activeTab === "recent") {
+      // Get entries from the last 7 days
+      const lastWeek = new Date();
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      filteredEntries = filteredEntries.filter(
+        entry => new Date(entry.date) >= lastWeek
       );
-      setEntries(updatedEntries);
-      localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
-      
-      // Update selected entry if it's the one being favorited
-      if (selectedEntry && selectedEntry.id === id) {
-        setSelectedEntry({
-          ...selectedEntry,
-          favorite: !selectedEntry.favorite
-        });
-      }
-    };
-  
-    const resetForm = () => {
-      setCurrentEntry({
-        id: "",
-        date: new Date().toISOString().split("T")[0],
-        title: "",
-        content: "",
+    }
+    
+    // Sort by date (newest first)
+    return filteredEntries.sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+  };
+
+  const saveEntry = () => {
+    let updatedEntries;
+
+    if (editMode) {
+      updatedEntries = entries.map((entry) => (entry.id === currentEntry.id ? currentEntry : entry));
+    } else {
+      updatedEntries = [
+        ...entries,
+        {
+          ...currentEntry,
+          id: Date.now().toString(),
+          prompt: selectedPrompt || undefined,
+        },
+      ];
+    }
+
+    setEntries(updatedEntries);
+    localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
+    resetForm();
+    
+    // Select the newly created entry if not in edit mode
+    if (!editMode) {
+      const newEntry = updatedEntries[updatedEntries.length - 1];
+      setSelectedEntry(newEntry);
+    }
+  };
+
+  const deleteEntry = (id) => {
+    const updatedEntries = entries.filter((entry) => entry.id !== id);
+    setEntries(updatedEntries);
+    localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
+    setSelectedEntry(null);
+  };
+
+  const toggleFavorite = (id) => {
+    const updatedEntries = entries.map(entry => 
+      entry.id === id 
+        ? { ...entry, favorite: !entry.favorite }
+        : entry
+    );
+    setEntries(updatedEntries);
+    localStorage.setItem("journalEntries", JSON.stringify(updatedEntries));
+    
+    // Update selected entry if it's the one being favorited
+    if (selectedEntry && selectedEntry.id === id) {
+      setSelectedEntry({
+        ...selectedEntry,
+        favorite: !selectedEntry.favorite
       });
-      setSelectedPrompt("");
-      setEditMode(false);
-      setOpen(false);
-    };
-  
-    const handleEdit = (entry) => {
-      setCurrentEntry(entry);
-      setSelectedPrompt(entry.prompt || "");
-      setEditMode(true);
-      setOpen(true);
-    };
-  
-    const handlePromptSelect = (value) => {
-      setSelectedPrompt(value);
-      if (value && value !== "none") {
-        setCurrentEntry((prev) => ({
-          ...prev,
-          content: prev.content ? prev.content : value,
-        }));
-      }
-    };
-  
-    const getDateDisplay = (dateString) => {
-      const entryDate = new Date(dateString);
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-      
-      if (entryDate.toDateString() === today.toDateString()) {
-        return "Today";
-      } else if (entryDate.toDateString() === yesterday.toDateString()) {
-        return "Yesterday";
-      } else {
-        return entryDate.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: entryDate.getFullYear() !== today.getFullYear() ? "numeric" : undefined
-        });
-      }
-    };
-  
-    const getWordCount = (text) => {
-      return text.trim().split(/\s+/).filter(Boolean).length;
-    };
-  
-    const filteredEntries = getFilteredEntries();
-  
-    return (
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl font-bold text-primary">Journal</h1>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="flex items-center gap-2 rounded-full shadow-md">
-                <Plus className="h-4 w-4" />
-                New Entry
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-xl">
-              <DialogHeader className="p-6 pb-2 bg-gradient-to-r from-blue-50 to-green-50 border-b">
-                <DialogTitle className="text-xl">{editMode ? "Edit Journal Entry" : "Create New Journal Entry"}</DialogTitle>
-                <DialogDescription>
-                  Express your thoughts and feelings in a safe space.
-                </DialogDescription>
-              </DialogHeader>
-  
-              <div className="px-6 space-y-6 py-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg shadow">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="date" className="font-medium">Date</Label>
-                  </div>
-                  <input
-                    type="date"
-                    id="date"
-                    value={currentEntry.date}
-                    onChange={(e) => setCurrentEntry({ ...currentEntry, date: e.target.value })}
-                    className="w-full p-3 rounded-lg border border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20"
-                  />
+    }
+  };
+
+  const resetForm = () => {
+    setCurrentEntry({
+      id: "",
+      date: new Date().toISOString().split("T")[0],
+      title: "",
+      content: "",
+    });
+    setSelectedPrompt("");
+    setEditMode(false);
+    setOpen(false);
+  };
+
+  const handleEdit = (entry) => {
+    setCurrentEntry(entry);
+    setSelectedPrompt(entry.prompt || "");
+    setEditMode(true);
+    setOpen(true);
+  };
+
+  const handlePromptSelect = (value) => {
+    setSelectedPrompt(value);
+    if (value && value !== "none") {
+      setCurrentEntry((prev) => ({
+        ...prev,
+        content: prev.content ? prev.content : value,
+      }));
+    }
+  };
+
+  const getDateDisplay = (dateString) => {
+    const entryDate = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (entryDate.toDateString() === today.toDateString()) {
+      return "Today";
+    } else if (entryDate.toDateString() === yesterday.toDateString()) {
+      return "Yesterday";
+    } else {
+      return entryDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: entryDate.getFullYear() !== today.getFullYear() ? "numeric" : undefined
+      });
+    }
+  };
+
+  const getWordCount = (text) => {
+    return text.trim().split(/\s+/).filter(Boolean).length;
+  };
+
+  const filteredEntries = getFilteredEntries();
+
+  return (
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="flex justify-between items-center p-4 pb-2">
+        <h1 className="text-xl font-bold text-primary">Journal</h1>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2 rounded-full shadow-md">
+              <Plus className="h-4 w-4" />
+              New Entry
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-xl">
+            <DialogHeader className="p-6 pb-2 bg-gradient-to-r from-blue-50 to-green-50 border-b">
+              <DialogTitle className="text-xl">{editMode ? "Edit Journal Entry" : "Create New Journal Entry"}</DialogTitle>
+              <DialogDescription>
+                Express your thoughts and feelings in a safe space.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="px-6 space-y-6 py-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg shadow">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <Label htmlFor="date" className="font-medium">Date</Label>
                 </div>
-  
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <BookOpen className="h-4 w-4 text-muted-foreground" />
-                    <Label htmlFor="title" className="font-medium">Title</Label>
-                  </div>
-                  <Input
-                    id="title"
-                    placeholder="Give your entry a title"
-                    value={currentEntry.title}
-                    onChange={(e) => setCurrentEntry({ ...currentEntry, title: e.target.value })}
-                    className="border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-  
-                {!editMode && (
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-muted-foreground" />
-                      <Label htmlFor="prompt" className="font-medium">Writing Prompt (Optional)</Label>
-                    </div>
-                    <Select value={selectedPrompt} onValueChange={handlePromptSelect}>
-                      <SelectTrigger className="border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20">
-                        <SelectValue placeholder="Select a prompt or write freely" />
-                      </SelectTrigger>
-                      <SelectContent className={"bg-white"}>
-                        <SelectItem value="none">Write freely</SelectItem>
-                        {JOURNAL_PROMPTS.map((prompt, index) => (
-                          <SelectItem key={index} value={prompt}>
-                            {prompt}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-  
-                <div className="space-y-2">
-                  <Label htmlFor="content" className="font-medium flex items-center gap-2">
-                    <Edit className="h-4 w-4 text-muted-foreground" />
-                    Journal Entry
-                  </Label>
-                  <Textarea
-                    id="content"
-                    placeholder="Write your thoughts here..."
-                    value={currentEntry.content}
-                    onChange={(e) => setCurrentEntry({ ...currentEntry, content: e.target.value })}
-                    className="min-h-[250px] border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20 text-base"
-                  />
-                </div>
+                <input
+                  type="date"
+                  id="date"
+                  value={currentEntry.date}
+                  onChange={(e) => setCurrentEntry({ ...currentEntry, date: e.target.value })}
+                  className="w-full p-3 rounded-lg border border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20"
+                />
               </div>
-  
-              <DialogFooter className="p-4 bg-gray-50 border-t">
-                <div className="text-xs text-muted-foreground mr-auto">
-                  {getWordCount(currentEntry.content)} words
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4 text-muted-foreground" />
+                  <Label htmlFor="title" className="font-medium">Title</Label>
                 </div>
-                <Button variant="outline" onClick={resetForm} className="rounded-full">
-                  Cancel
-                </Button>
-                <Button
-                  onClick={saveEntry}
-                  disabled={!currentEntry.title || !currentEntry.content}
-                  className="flex items-center gap-2 rounded-full"
-                >
-                  <Save className="h-4 w-4" />
-                  Save Entry
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
-  
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Input
+                  id="title"
+                  placeholder="Give your entry a title"
+                  value={currentEntry.title}
+                  onChange={(e) => setCurrentEntry({ ...currentEntry, title: e.target.value })}
+                  className="border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20"
+                />
+              </div>
+
+              {!editMode && (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-muted-foreground" />
+                    <Label htmlFor="prompt" className="font-medium">Writing Prompt (Optional)</Label>
+                  </div>
+                  <Select value={selectedPrompt} onValueChange={handlePromptSelect}>
+                    <SelectTrigger className="border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20">
+                      <SelectValue placeholder="Select a prompt or write freely" />
+                    </SelectTrigger>
+                    <SelectContent className={"bg-white"}>
+                      <SelectItem value="none">Write freely</SelectItem>
+                      {JOURNAL_PROMPTS.map((prompt, index) => (
+                        <SelectItem key={index} value={prompt}>
+                          {prompt}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="content" className="font-medium flex items-center gap-2">
+                  <Edit className="h-4 w-4 text-muted-foreground" />
+                  Journal Entry
+                </Label>
+                <Textarea
+                  id="content"
+                  placeholder="Write your thoughts here..."
+                  value={currentEntry.content}
+                  onChange={(e) => setCurrentEntry({ ...currentEntry, content: e.target.value })}
+                  className="min-h-[250px] border-gray-200 focus:border-primary/30 focus:ring-2 focus:ring-primary/20 text-base"
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="p-4 bg-gray-50 border-t">
+              <div className="text-xs text-muted-foreground mr-auto">
+                {getWordCount(currentEntry.content)} words
+              </div>
+              <Button variant="outline" onClick={resetForm} className="rounded-full">
+                Cancel
+              </Button>
+              <Button
+                onClick={saveEntry}
+                disabled={!currentEntry.title || !currentEntry.content}
+                className="flex items-center gap-2 rounded-full"
+              >
+                <Save className="h-4 w-4" />
+                Save Entry
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="flex-1 overflow-auto p-4 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
           <div className="md:col-span-1 space-y-5">
-            <Card className="border-transparent shadow-md">
+            <Card className="h-full border-transparent shadow-md">
               <CardHeader className="pb-3 border-b bg-gradient-to-r from-blue-50 to-green-50">
                 <div className="flex justify-between items-center">
                   <CardTitle>Your Journal</CardTitle>
@@ -478,10 +478,10 @@ export function JournalComponent() {
               </Card>
             )}
           </div>
-  
-          <div className="md:col-span-2">
+
+          <div className="md:col-span-2 h-full">
             {selectedEntry ? (
-              <Card className="border-transparent shadow-md">
+              <Card className="border-transparent shadow-md h-full flex flex-col">
                 <CardHeader className="flex flex-row items-start justify-between space-y-0 bg-gradient-to-r from-blue-50 to-green-50 border-b pb-3">
                   <div>
                     <CardTitle className="flex items-center gap-2">
@@ -518,7 +518,7 @@ export function JournalComponent() {
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </AlertDialogTrigger>
-                      <AlertDialogContent className="rounded-lg">
+                      <AlertDialogContent className="rounded-lg bg-white">
                         <AlertDialogHeader>
                           <AlertDialogTitle>Delete Journal Entry</AlertDialogTitle>
                           <AlertDialogDescription>
@@ -538,7 +538,7 @@ export function JournalComponent() {
                     </AlertDialog>
                   </div>
                 </CardHeader>
-                <CardContent className="p-6" ref={contentRef}>
+                <CardContent className="p-6 flex-1 overflow-auto" ref={contentRef}>
                   {selectedEntry.prompt && (
                     <div className="bg-blue-50 p-4 rounded-lg mb-5 text-sm border border-blue-100">
                       <div className="flex items-center gap-2 mb-1">
@@ -586,5 +586,6 @@ export function JournalComponent() {
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}

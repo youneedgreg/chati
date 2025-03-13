@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useChat } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 
 // Initial messages for different topics
 const topicMessages = {
@@ -17,18 +16,43 @@ const topicMessages = {
 };
 
 export function ChatComponent({ activeTopic }) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
-    initialMessages: [
-      {
-        id: "welcome-message",
-        role: "assistant",
-        content: "Hi there! I'm here to listen and support you. How are you feeling today?",
-      },
-    ],
-  });
-
+  const [messages, setMessages] = useState([
+    {
+      id: "welcome-message",
+      role: "assistant",
+      content: "Hi there! I'm CHATI, your wellness assistant. How are you feeling today?",
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const [topicLoaded, setTopicLoaded] = useState(null);
+
+  // Improved API call function 
+  const callChatAPI = async (messageHistory) => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: messageHistory
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch response');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      // Log the error but don't reassign it (to avoid the unused variable warning)
+      console.error('Error calling chat API:', error);
+      throw error;
+    }
+  };
 
   // Handle topic changes
   useEffect(() => {
@@ -40,28 +64,120 @@ export function ChatComponent({ activeTopic }) {
         content: topicMessages[activeTopic]
       };
       
-      // Add assistant response acknowledging the topic
-      const newAssistantMessage = {
-        id: `response-${activeTopic}`,
-        role: "assistant",
-        content: `I'd be happy to chat about ${activeTopic.replace(/-/g, ' ')}. What specific aspects would you like to explore?`
+      setIsLoading(true);
+      
+      // Create a function to handle the API call
+      const fetchAssistantResponse = async () => {
+        try {
+          const data = await callChatAPI([
+            messages[0], // Keep just the welcome message
+            newUserMessage
+          ]);
+          
+          // Add assistant response
+          const newAssistantMessage = {
+            id: `response-${Date.now()}`,
+            role: "assistant",
+            content: data.content || `I'd be happy to chat about ${activeTopic.replace(/-/g, ' ')}. What specific aspects would you like to explore?`
+          };
+          
+          // Set the messages with the new topic
+          setMessages([
+            messages[0], // Keep the welcome message
+            newUserMessage,
+            newAssistantMessage
+          ]);
+          
+        } catch (err) {
+          // Use a different variable name to avoid the unused variable warning
+          console.error('Error in fetchAssistantResponse:', err);
+          
+          // Fallback message in case of error
+          const fallbackMessage = {
+            id: `response-${Date.now()}`,
+            role: "assistant",
+            content: `I'd be happy to chat about ${activeTopic.replace(/-/g, ' ')}. What specific aspects would you like to explore?`
+          };
+          
+          setMessages([
+            messages[0],
+            newUserMessage,
+            fallbackMessage
+          ]);
+        } finally {
+          setIsLoading(false);
+        }
       };
       
-      // Set the messages with the new topic
-      setMessages([
-        messages[0], // Keep the welcome message
-        newUserMessage,
-        newAssistantMessage
-      ]);
+      fetchAssistantResponse();
       
       // Mark this topic as loaded
       setTopicLoaded(activeTopic);
     }
-  }, [activeTopic, topicLoaded, messages, setMessages]);
+  }, [activeTopic, topicLoaded, messages]);
 
+  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!input.trim() || isLoading) return;
+    
+    // Add user message
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: input
+    };
+    
+    // Update messages with user message
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    
+    // Clear input
+    setInput("");
+    
+    // Set loading state
+    setIsLoading(true);
+    
+    try {
+      // Call the API
+      const data = await callChatAPI(updatedMessages);
+      
+      // Add assistant response
+      const assistantMessage = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: data.content
+      };
+      
+      setMessages([...updatedMessages, assistantMessage]);
+      
+    } catch (err) {
+      // Use a different variable name to avoid the unused variable warning
+      console.error('Error in handleSubmit:', err);
+      
+      // Add error message
+      const errorMessage = {
+        id: `error-${Date.now()}`,
+        role: "assistant",
+        content: "I'm sorry, I'm having trouble connecting right now. Please try again later."
+      };
+      
+      setMessages([...updatedMessages, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col h-full relative">
@@ -71,7 +187,7 @@ export function ChatComponent({ activeTopic }) {
             <div className="flex items-start gap-3 max-w-[80%]">
               {message.role === "assistant" && (
                 <Avatar className="mt-1">
-                  <AvatarFallback className="bg-primary text-primary-foreground">AI</AvatarFallback>
+                  <AvatarFallback className="bg-green-600 text-white">CH</AvatarFallback>
                 </Avatar>
               )}
 
@@ -79,7 +195,7 @@ export function ChatComponent({ activeTopic }) {
                 className={`p-3 rounded-xl shadow-md ${
                   message.role === "user"
                     ? "bg-blue-500 text-white rounded-br-none"
-                    : "bg-gray-200 text-gray-900 rounded-bl-none"
+                    : "bg-white text-gray-900 rounded-bl-none border border-gray-100"
                 }`}
               >
                 {message.content}
@@ -94,6 +210,21 @@ export function ChatComponent({ activeTopic }) {
           </div>
         ))}
         <div ref={messagesEndRef} />
+        
+        {/* Loading indicator */}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="flex items-start gap-3 max-w-[80%]">
+              <Avatar className="mt-1">
+                <AvatarFallback className="bg-green-600 text-white">CH</AvatarFallback>
+              </Avatar>
+              <div className="p-3 rounded-xl shadow-md bg-white text-gray-900 rounded-bl-none border border-gray-100 flex items-center">
+                <Loader2 className="h-5 w-5 animate-spin text-green-500 mr-2" />
+                <span>Thinking...</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 border-t bg-white p-4">
@@ -107,10 +238,18 @@ export function ChatComponent({ activeTopic }) {
           />
           <Button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 transition-all duration-200 text-white px-4 py-2 rounded-full shadow-md"
+            className={`${
+              isLoading || !input.trim() 
+                ? "bg-gray-400" 
+                : "bg-green-600 hover:bg-green-700"
+            } transition-all duration-200 text-white px-4 py-2 rounded-full shadow-md`}
             disabled={isLoading || !input.trim()}
           >
-            <Send className="h-5 w-5" />
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Send className="h-5 w-5" />
+            )}
           </Button>
         </form>
       </div>
