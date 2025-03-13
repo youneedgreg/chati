@@ -134,7 +134,6 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
-components split
 dark mode
 favicon and title
 perfomance vercel tweaks
@@ -143,3 +142,11 @@ tabs stick
 comp ui
 history and chats and journal auth
 database double fix
+brainstorm ideas
+learn something new
+![alt text](image-1.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+shamiri instagram post integration
+loaders
+memory game

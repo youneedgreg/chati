@@ -1,4 +1,6 @@
 "use client";
 
-// Export all components from the file
-export { ChatComponent, GamesComponent, JournalComponent, MoodTrackerComponent } from "./chati-components";
+export { ChatComponent } from "./chat-components";
+export { GamesComponent } from "./games-components";
+export { JournalComponent } from "./journal-components";
+export { MoodTrackerComponent } from "./mood-tracker-components";
