@@ -134,12 +134,13 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
+comp ui
+ai integration
+typescript
 dark mode
 favicon and title
 perfomance vercel tweaks
-typescript
 tabs stick
-comp ui
 history and chats and journal auth
 database double fix
 brainstorm ideas
@@ -150,3 +151,6 @@ learn something new
 shamiri instagram post integration
 loaders
 memory game
+mobbin.com
+database connect
+

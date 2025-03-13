@@ -25,8 +25,8 @@ export function ChatComponent() {
   }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+    <div className="flex-1 flex flex-col h-full relative">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-20">
         {messages.map((message) => (
           <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
             <div className="flex items-start gap-3 max-w-[80%]">
@@ -57,12 +57,12 @@ export function ChatComponent() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="border-t bg-white p-4 sticky bottom-0">
+      <div className="absolute bottom-0 left-0 right-0 border-t bg-white p-4">
         <form onSubmit={handleSubmit} className="flex w-full gap-2">
           <Input
             value={input}
             onChange={handleInputChange}
-            placeholder="Type your message here..."
+            placeholder="Talk to chati..."
             className="flex-1 border border-gray-300 shadow-sm rounded-full px-4 py-2"
             disabled={isLoading}
           />
