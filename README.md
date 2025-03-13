@@ -10,6 +10,8 @@ A compassionate AI-powered chatbot designed to support users facing mental healt
 ✅ Privacy & Security – Ensures anonymous chat and secure data storage.
 ✅ Dark Mode 
 ✅ Loader
+learn something then copy paste to journal.
+enter key should submit
 
 
 # 🛠️ Tech Stack
