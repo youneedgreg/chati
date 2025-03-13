@@ -21,7 +21,7 @@ export async function POST(request) {
     const payload = {
       inputs: `${systemPrompt}\n\nUser: ${lastUserMessage}\n\nCHATI:`,
       parameters: {
-        max_new_tokens: 250,
+        max_new_tokens: 500,
         temperature: 0.7,
         top_p: 0.9,
         do_sample: true,

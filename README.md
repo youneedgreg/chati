@@ -134,6 +134,7 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
+log in sign up button
 potrait ipad
 comp ui
 user session

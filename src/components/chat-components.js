@@ -48,10 +48,21 @@ export function ChatComponent({ activeTopic }) {
       
       return await response.json();
     } catch (error) {
-      // Log the error but don't reassign it (to avoid the unused variable warning)
       console.error('Error calling chat API:', error);
       throw error;
     }
+  };
+
+  // Format long messages with proper paragraph breaks
+  const formatMessage = (content) => {
+    if (!content) return "";
+    
+    // Ensure paragraphs are properly displayed
+    return content.split('\n').map((paragraph, index) => (
+      <p key={index} className={index > 0 ? "mt-2" : ""}>
+        {paragraph}
+      </p>
+    ));
   };
 
   // Handle topic changes
@@ -89,7 +100,6 @@ export function ChatComponent({ activeTopic }) {
           ]);
           
         } catch (err) {
-          // Use a different variable name to avoid the unused variable warning
           console.error('Error in fetchAssistantResponse:', err);
           
           // Fallback message in case of error
@@ -163,7 +173,6 @@ export function ChatComponent({ activeTopic }) {
       setMessages([...updatedMessages, assistantMessage]);
       
     } catch (err) {
-      // Use a different variable name to avoid the unused variable warning
       console.error('Error in handleSubmit:', err);
       
       // Add error message
@@ -184,9 +193,9 @@ export function ChatComponent({ activeTopic }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-20">
         {messages.map((message) => (
           <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className="flex items-start gap-3 max-w-[80%]">
+            <div className="flex items-start gap-3 max-w-[85%]">
               {message.role === "assistant" && (
-                <Avatar className="mt-1">
+                <Avatar className="mt-1 flex-shrink-0">
                   <AvatarFallback className="bg-green-600 text-white">CH</AvatarFallback>
                 </Avatar>
               )}
@@ -196,13 +205,13 @@ export function ChatComponent({ activeTopic }) {
                   message.role === "user"
                     ? "bg-blue-500 text-white rounded-br-none"
                     : "bg-white text-gray-900 rounded-bl-none border border-gray-100"
-                }`}
+                } break-words`}
               >
-                {message.content}
+                {formatMessage(message.content)}
               </div>
 
               {message.role === "user" && (
-                <Avatar className="mt-1">
+                <Avatar className="mt-1 flex-shrink-0">
                   <AvatarFallback className="bg-gray-400 text-white">You</AvatarFallback>
                 </Avatar>
               )}
@@ -214,8 +223,8 @@ export function ChatComponent({ activeTopic }) {
         {/* Loading indicator */}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="flex items-start gap-3 max-w-[80%]">
-              <Avatar className="mt-1">
+            <div className="flex items-start gap-3 max-w-[85%]">
+              <Avatar className="mt-1 flex-shrink-0">
                 <AvatarFallback className="bg-green-600 text-white">CH</AvatarFallback>
               </Avatar>
               <div className="p-3 rounded-xl shadow-md bg-white text-gray-900 rounded-bl-none border border-gray-100 flex items-center">
