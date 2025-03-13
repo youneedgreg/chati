@@ -1,5 +1,8 @@
 # 🧠 Mental Health Chatbot with Games Corner and journalling center🎮
 A compassionate AI-powered chatbot designed to support users facing mental health challenges. It provides empathetic conversations, mood tracking, journal and a Games Corner with interactive activities to help users cope with distress.
+Featured Topics: Articles on managing anxiety, overcoming procrastination, plant therapy, mindfulness, sleep hygiene, and health trends.
+
+Interactive Tools: Sections for chat interactions, games, journaling, and mood tracking to engage users in their wellness journey.
 
 # ✨ Features
 ✅ AI Chatbot for Mental Health – Offers supportive conversations, coping strategies, and self-care advice.
@@ -11,7 +14,7 @@ A compassionate AI-powered chatbot designed to support users facing mental healt
 ✅ Dark Mode 
 ✅ Loader
 learn something then copy paste to journal.
-enter key should submit
+it is not a licenced professional.
 
 
 # 🛠️ Tech Stack
@@ -136,8 +139,10 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
+loaders
 log in sign up button
 potrait ipad
+log in and sign up page better ui
 comp ui
 user session
 chati talk to 
@@ -155,7 +160,9 @@ learn something new
 shamiri instagram post integration
 loaders
 history chat
+terms and conditions.
 back to auth
-mobbin.com
 database connect
+search the web function
+enter key should submit
 
