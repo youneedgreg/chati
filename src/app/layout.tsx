@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 // Import PageLoader component
-import PageLoader from "@/components/ui/page-loader";
+import PageLoader from "../components/ui/page-loader";
 
 export const metadata: Metadata = {
   title: "CHATI - Your Mental Wellness Assistant",

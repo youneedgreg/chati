@@ -139,14 +139,15 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
-loaders
+comp ui
+tablet ui
+mobile ui
+chat component ui
 log in sign up button
 potrait ipad
 log in and sign up page better ui
-comp ui
 user session
 chati talk to 
-typescript
 dark mode
 favicon and title
 perfomance vercel tweaks
