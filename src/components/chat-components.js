@@ -144,6 +144,14 @@ export function ChatComponent({ activeTopic }) {
     setInput(e.target.value);
   };
 
+  // Handle key press for Enter key
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && input.trim() && !isLoading) {
+      e.preventDefault(); // Prevent default to avoid form submission or new line
+      handleSubmit(e);
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -288,10 +296,10 @@ export function ChatComponent({ activeTopic }) {
             ref={inputRef}
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handleKeyPress}
             placeholder="Type your message here..."
             className="flex-1 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm rounded-full px-4 py-2"
             disabled={isLoading}
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
           />
           <Button
             type="submit"
