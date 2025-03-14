@@ -137,22 +137,20 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
-
-chat component ui
 history chat
 chati talk to 
 search the web function
 enter key should submit
-favicon
 tablet ui
 mobile ui
 
 # tommorow
 games corner
+pymetric games
 log in sign up button
 potrait ipad
 placeholder pictures
-log in and sign up page better ui
+log in and sign up page better ui-two column
 user session
 dark mode
 perfomance vercel tweaks
@@ -167,5 +165,7 @@ learn something new
 shamiri instagram post integration
 terms and conditions.
 back to auth
+ai generated avatar
 database connect
+![alt text](image-4.png)
 

@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send, Loader2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Send, Loader2, Trash2 } from "lucide-react";
 
 // Initial messages for different topics
 const topicMessages = {
@@ -26,6 +26,7 @@ export function ChatComponent({ activeTopic }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
   const [topicLoaded, setTopicLoaded] = useState(null);
 
   // Improved API call function 
@@ -131,6 +132,13 @@ export function ChatComponent({ activeTopic }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Focus input when component loads
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   // Handle input change
   const handleInputChange = (e) => {
     setInput(e.target.value);
@@ -188,31 +196,68 @@ export function ChatComponent({ activeTopic }) {
     }
   };
 
+  // Clear chat history
+  const handleClearChat = () => {
+    setMessages([
+      {
+        id: "welcome-message",
+        role: "assistant",
+        content: "Hi there! I'm CHATI, your wellness assistant. How are you feeling today?",
+      },
+    ]);
+    setTopicLoaded(null);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-full relative">
+    <div className="flex-1 flex flex-col h-full relative shadow-md overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-3 flex justify-between items-center border-b">
+        <div className="flex items-center gap-2">
+          <Avatar className="h-8 w-8 border-2 border-white">
+            <AvatarImage src="/image-4.png" alt="CHATI Logo" />
+            <AvatarFallback className="bg-blue-800 text-white">CH</AvatarFallback>
+          </Avatar>
+          <span className="font-semibold text-white text-lg">CHATI</span>
+        </div>
+        <div className="flex gap-2">
+          <Button 
+            onClick={handleClearChat} 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            title="Clear chat"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 pb-20">
         {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+          <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fadeIn`}>
             <div className="flex items-start gap-3 max-w-[85%]">
               {message.role === "assistant" && (
-                <Avatar className="mt-1 flex-shrink-0">
-                  <AvatarFallback className="bg-green-600 text-white">CH</AvatarFallback>
+                <Avatar className="mt-1 flex-shrink-0 border border-gray-200">
+                  <AvatarImage src="/image-4.png" alt="CHATI Logo" />
+                  <AvatarFallback className="bg-blue-600 text-white">CH</AvatarFallback>
                 </Avatar>
               )}
 
               <div
-                className={`p-3 rounded-xl shadow-md ${
+                className={`p-3 rounded-xl ${
                   message.role === "user"
-                    ? "bg-blue-500 text-white rounded-br-none"
-                    : "bg-white text-gray-900 rounded-bl-none border border-gray-100"
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-br-none"
+                    : "bg-white text-gray-800 rounded-bl-none border border-gray-200 shadow-sm"
                 } break-words`}
               >
                 {formatMessage(message.content)}
               </div>
 
               {message.role === "user" && (
-                <Avatar className="mt-1 flex-shrink-0">
-                  <AvatarFallback className="bg-gray-400 text-white">You</AvatarFallback>
+                <Avatar className="mt-1 flex-shrink-0 border border-gray-200">
+                  <AvatarFallback className="bg-gradient-to-br from-gray-600 to-gray-700 text-white">You</AvatarFallback>
                 </Avatar>
               )}
             </div>
@@ -222,13 +267,14 @@ export function ChatComponent({ activeTopic }) {
         
         {/* Loading indicator */}
         {isLoading && (
-          <div className="flex justify-start">
+          <div className="flex justify-start animate-fadeIn">
             <div className="flex items-start gap-3 max-w-[85%]">
-              <Avatar className="mt-1 flex-shrink-0">
-                <AvatarFallback className="bg-green-600 text-white">CH</AvatarFallback>
+              <Avatar className="mt-1 flex-shrink-0 border border-gray-200">
+                <AvatarImage src="/image-4.png" alt="CHATI Logo" />
+                <AvatarFallback className="bg-blue-600 text-white">CH</AvatarFallback>
               </Avatar>
-              <div className="p-3 rounded-xl shadow-md bg-white text-gray-900 rounded-bl-none border border-gray-100 flex items-center">
-                <Loader2 className="h-5 w-5 animate-spin text-green-500 mr-2" />
+              <div className="p-3 rounded-xl shadow-sm bg-white text-gray-800 rounded-bl-none border border-gray-200 flex items-center">
+                <Loader2 className="h-5 w-5 animate-spin text-blue-500 mr-2" />
                 <span>Thinking...</span>
               </div>
             </div>
@@ -239,18 +285,20 @@ export function ChatComponent({ activeTopic }) {
       <div className="absolute bottom-0 left-0 right-0 border-t bg-white p-4">
         <form onSubmit={handleSubmit} className="flex w-full gap-2">
           <Input
+            ref={inputRef}
             value={input}
             onChange={handleInputChange}
             placeholder="Type your message here..."
-            className="flex-1 border border-gray-300 shadow-sm rounded-full px-4 py-2"
+            className="flex-1 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm rounded-full px-4 py-2"
             disabled={isLoading}
+            onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
           />
           <Button
             type="submit"
             className={`${
               isLoading || !input.trim() 
-                ? "bg-gray-400" 
-                : "bg-green-600 hover:bg-green-700"
+                ? "bg-gray-400 cursor-not-allowed" 
+                : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
             } transition-all duration-200 text-white px-4 py-2 rounded-full shadow-md`}
             disabled={isLoading || !input.trim()}
           >
@@ -262,6 +310,17 @@ export function ChatComponent({ activeTopic }) {
           </Button>
         </form>
       </div>
+
+      {/* Add custom CSS for animations */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }
