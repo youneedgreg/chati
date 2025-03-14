@@ -20,13 +20,13 @@ it is not a licenced professional.
 # 🛠️ Tech Stack
 Frontend: Next.js, Tailwind CSS, React
 Backend: Node.js, Express, MongoDB / PostgreSQL
-Auth:??
-AI Engine: Mastra AI / OpenAI GPT API
+Auth:Next-auth
+AI Engine: Hugging face
 Game Framework: Phaser.js, React Canvas
 Security: SSL/TLS, OAuth 2.0, JWT
 
 # 💻 Development Roadmap
-1. Develop AI Chatbot with Mastra AI / OpenAI GPT API
+1. Develop AI Chatbot with Hugging face
 2. Implement Games Corner with Phaser.js and React Canvas
 3. Integrate Mood Tracking and Journal features
 4. Set up Emergency Support and redirect to professional help
@@ -43,7 +43,6 @@ Mental health professionals and organizations
 Schools and universities for student support
 
 # 💸 Revenue Stream
-Advertising revenue
 Subscription
 take from t3
 Partnership revenue
@@ -73,7 +72,6 @@ Co-branded events and conferences
 10. Offer a free trial or demo for new users
 11. Develop a loyalty program for repeat customers
 12. Host events and conferences on mental health topics
-13. Develop a podcast or YouTube channel on mental health topics
 14. Create a newsletter or email list for subscribers
 15. Develop a mobile-friendly website for easy access
 16. Offer a free resource or guide for new users
@@ -83,7 +81,7 @@ Co-branded events and conferences
 20. Offer a free consultation or coaching session for new users
 21. Develop a mental health-focused online course or certification program
 22. Host a mental health-focused conference or summit
-23. Develop a mental health-themed podcast or YouTube series
+23. Develop a mental health-themed podcast or YouTube and tiktok series(animated)
 24. Create a mental health-focused community or forum
 25. Offer a free mental health assessment or quiz
 26. Develop a mental health-focused mobile app
@@ -139,17 +137,24 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
-comp ui
+
+chat component ui
+history chat
+chati talk to 
+search the web function
+enter key should submit
+favicon
 tablet ui
 mobile ui
-chat component ui
+
+# tommorow
+games corner
 log in sign up button
 potrait ipad
+placeholder pictures
 log in and sign up page better ui
 user session
-chati talk to 
 dark mode
-favicon and title
 perfomance vercel tweaks
 history and chats and journal auth
 database double fix
@@ -158,12 +163,9 @@ learn something new
 ![alt text](image-1.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
+![alt text](image-3.png)
 shamiri instagram post integration
-loaders
-history chat
 terms and conditions.
 back to auth
 database connect
-search the web function
-enter key should submit
 
