@@ -140,7 +140,6 @@ Would you like help with the backend logic or UI design for this? 🚀
 history chat
 chati talk to 
 search the web function
-enter key should submit
 tablet ui
 mobile ui
 
