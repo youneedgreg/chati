@@ -18,9 +18,13 @@ export async function POST(request) {
       "empathetic guidance on mental health, wellness, and personal development topics. You are " +
       "conversational, warm, and encouraging. You offer practical advice while being mindful that " +
       "you are not a licensed therapist or medical professional. Keep your responses well-structured " +
-      "with proper paragraph breaks. Never generate follow-up user messages or questions.";
+      "with proper paragraph breaks. You should naturally offer suggestions and follow-up guidance " +
+      "as appropriate, such as 'Would you like me to help you create a custom meditation routine?' " +
+      "or 'I can suggest some breathing exercises that might help with this anxiety.' These natural " +
+      "continuations create a helpful, proactive conversation. However, never speak on behalf of the " +
+      "user or generate their responses.";
     
-    // Create the payload for Hugging Face Inference API - MODIFIED TO REMOVE "User:" PROMPT
+    // Create the payload for Hugging Face Inference API
     const payload = {
       inputs: `${systemPrompt}\n\n${lastUserMessage}\n\nCHATI:`,
       parameters: {
@@ -28,7 +32,7 @@ export async function POST(request) {
         temperature: 0.7,
         top_p: 0.9,
         do_sample: true,
-        stop: ["User:", "User", "\nUser"]  // Keep these stop sequences
+        stop: ["User:", "\nUser:"] // Only stop at explicit user turns
       }
     };
 
@@ -59,32 +63,28 @@ export async function POST(request) {
     // Clean up the response to get just the assistant's part
     assistantResponse = assistantResponse.split("CHATI:")[1]?.trim() || assistantResponse;
     
-    // Remove any "User:" parts and everything after it
+    // Remove any "User:" parts and everything after it (still need this as a safety)
     if (assistantResponse.includes("User:")) {
       assistantResponse = assistantResponse.split("User:")[0].trim();
     }
     
-    // Remove any variations like "User " or similar user prompts
-    const userVariations = ["\nUser ", " User ", "\nHuman:", " Human:"];
-    for (const variation of userVariations) {
-      if (assistantResponse.includes(variation)) {
-        assistantResponse = assistantResponse.split(variation)[0].trim();
-      }
-    }
-    
-    // Additional cleanup for common response endings that suggest a user turn
-    const cleanupPatterns = [
-      "What would you like to know more about?",
-      "Do you have any other questions?",
-      "Is there something specific you'd like me to explain?",
-      "Would you like to know more about this topic?"
+    // Check for other user prompt patterns but be more selective
+    const userPatterns = [
+      "\nUser ", 
+      "\nHuman:", 
+      "\nYou: ",
+      "Human: ",
+      "\nPerson: "
     ];
     
-    for (const pattern of cleanupPatterns) {
-      if (assistantResponse.endsWith(pattern)) {
-        assistantResponse = assistantResponse.substring(0, assistantResponse.length - pattern.length).trim();
+    for (const pattern of userPatterns) {
+      if (assistantResponse.includes(pattern)) {
+        assistantResponse = assistantResponse.split(pattern)[0].trim();
       }
     }
+    
+    // Don't remove natural follow-up questions!
+    // Only filter out patterns that represent the model trying to speak as the user
     
     // Return the cleaned up response
     return NextResponse.json({ content: assistantResponse });
