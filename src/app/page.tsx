@@ -175,7 +175,7 @@ const MobileFeaturedTopics = ({ topics, onTopicClick }: MobileFeaturedTopicsProp
           >
             <div className="w-full h-full absolute inset-0">
               <Image 
-                src="/api/placeholder/280/180" 
+                src="/image.png" 
                 alt="Brainstorm Ideas" 
                 fill
                 sizes="(max-width: 768px) 50vw, 33vw"
