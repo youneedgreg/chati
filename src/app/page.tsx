@@ -204,7 +204,7 @@ const MobileFeaturedTopics = ({ topics, onTopicClick }: MobileFeaturedTopicsProp
                 priority={true}
               />
             </div>
-            <div className="absolute inset-0 bg-opacity-70 bg-emerald-500"></div>
+            <div className="absolute inset-0 bg-opacity-70 " ></div>
             <div className="absolute inset-0 p-4 flex flex-col justify-center items-center">
               <h3 className="text-white font-bold text-center text-sm leading-tight">Learn Something New</h3>
             </div>
