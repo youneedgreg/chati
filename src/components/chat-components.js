@@ -470,7 +470,7 @@ export function ChatComponent({ activeTopic }) {
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
-              placeholder="Type your message here..."
+              placeholder="Talk to Chati..."
               className="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm rounded-full px-4 py-2 pr-10"
               disabled={isLoading}
             />

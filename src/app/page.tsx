@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 
 // Import our component functions
 import { ChatComponent, GamesComponent, JournalComponent, MoodTrackerComponent } from "./../components/components";
+import { Navbar } from "./../components/Navbar"; // Import the Navbar component
 
 type TabType = "chat" | "games" | "journal" | "mood-tracker";
 
@@ -303,9 +304,12 @@ export default function ChatiApp() {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-green-200 flex flex-col">
-      <div className="flex h-screen">
+      {/* Add the Navbar at the top */}
+      <Navbar />
+      
+      <div className="flex h-screen pt-16"> {/* Add padding top to account for navbar height */}
         {/* Left Sidebar for larger screens */}
-        <div className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-200 p-4 space-y-2 shadow-lg z-10">
+        <div className="hidden md:flex flex-col fixed left-0 top-16 bottom-0 w-64 bg-white border-r border-gray-200 p-4 space-y-2 shadow-lg z-10">
           <div className="mb-6 px-4">
             <CardTitle className="text-xl font-bold text-gray-800 mb-1">CHATI</CardTitle>
             <p className="text-sm text-gray-600">{greeting}</p>
@@ -323,7 +327,7 @@ export default function ChatiApp() {
         </div>
         
         {/* Featured Topics Section - visible only on larger screens */}
-        <div className="hidden md:flex flex-col fixed left-64 top-0 bottom-0 w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
+        <div className="hidden md:flex flex-col fixed left-64 top-16 bottom-0 w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
           <h2 className="font-medium text-gray-800 mb-4">Featured Topics</h2>
           <div className="grid gap-4">
             {featuredTopics.map((topic) => (

@@ -137,26 +137,26 @@ Technical Implementation Ideas
 Would you like help with the backend logic or UI design for this? 🚀
 
 # changes
-history chat
-chati talk to 
-search the web function
 tablet ui
 mobile ui
+placeholder pictures
+navbar
+games corner
+log in sign up button
+perfomance vercel tweaks
+brainstorm ideas
+learn something new
 
 # tommorow
-games corner
+history chat
+quote of the day
 pymetric games
-log in sign up button
 potrait ipad
-placeholder pictures
 log in and sign up page better ui-two column
 user session
 dark mode
-perfomance vercel tweaks
 history and chats and journal auth
 database double fix
-brainstorm ideas
-learn something new
 ![alt text](image-1.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
@@ -167,4 +167,6 @@ back to auth
 ai generated avatar
 database connect
 ![alt text](image-4.png)
+resume
+github portfolio
 
