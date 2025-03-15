@@ -7,15 +7,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Send, Loader2, Trash2, Search} from "lucide-react";
 
 // Initial messages for different topics
-const topicMessages = {
+const defaultTopicMessages = {
   "anxiety": "I'd like to discuss managing anxiety in daily life.",
   "procrastination": "I keep putting things off. Can you help me stop procrastinating?",
   "plant-therapy": "I'm interested in using plants for mindfulness and mental health. Any advice?",
   "sleep": "I'm having trouble sleeping. Do you have any sleep hygiene tips?",
   "wellness-trends": "What are the latest health and wellness trends of 2024?",
+  "brainstorm": "I need help brainstorming creative ideas for a project. Can you help me generate some innovative concepts?",
+  "learn": "I'd like to learn something new and interesting today. What topic do you recommend exploring?"
 };
 
-export function ChatComponent({ activeTopic }) {
+export function ChatComponent({ activeTopic, topicMessages = defaultTopicMessages }) {
   const [messages, setMessages] = useState([
     {
       id: "welcome-message",
@@ -156,12 +158,15 @@ export function ChatComponent({ activeTopic }) {
 
   // Handle topic changes
   useEffect(() => {
-    if (activeTopic && activeTopic !== topicLoaded && topicMessages[activeTopic]) {
+    // Use the passed in topicMessages or the default if none provided
+    const topicMessagesToUse = topicMessages || defaultTopicMessages;
+    
+    if (activeTopic && activeTopic !== topicLoaded && topicMessagesToUse[activeTopic]) {
       // Add user message for the selected topic
       const newUserMessage = {
         id: `topic-${activeTopic}`,
         role: "user",
-        content: topicMessages[activeTopic]
+        content: topicMessagesToUse[activeTopic]
       };
       
       setIsLoading(true);
@@ -213,7 +218,7 @@ export function ChatComponent({ activeTopic }) {
       // Mark this topic as loaded
       setTopicLoaded(activeTopic);
     }
-  }, [activeTopic, topicLoaded, messages]);
+  }, [activeTopic, topicLoaded, messages, topicMessages]);
 
   // Scroll to bottom when messages change
   useEffect(() => {

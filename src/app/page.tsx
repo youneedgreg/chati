@@ -10,9 +10,12 @@ import { motion } from "framer-motion";
 import { ChatComponent, GamesComponent, JournalComponent, MoodTrackerComponent } from "./../components/components";
 import { Navbar } from "./../components/Navbar"; // Import the Navbar component
 
-// Define the interface for topicMessages to be passed to ChatComponent
-interface TopicMessages {
-  [key: string]: string;
+// Topic interface for the featured topics
+interface Topic {
+  id: string;
+  title: string;
+  image: string;
+  color: string;
 }
 
 type TabType = "chat" | "games" | "journal" | "mood-tracker";
@@ -29,14 +32,6 @@ interface FeaturedTopicProps {
   image: string;
   color: string;
   onClick: () => void;
-}
-
-// Topic interface for the featured topics
-interface Topic {
-  id: string;
-  title: string;
-  image: string;
-  color: string;
 }
 
 // Mindful Loader Component
@@ -240,17 +235,6 @@ export default function ChatiApp() {
   const [showMobileChat, setShowMobileChat] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  // Define topicMessages for use with the ChatComponent
-  const topicMessages: TopicMessages = {
-    "anxiety": "I'd like to discuss managing anxiety in daily life.",
-    "procrastination": "I keep putting things off. Can you help me stop procrastinating?",
-    "plant-therapy": "I'm interested in using plants for mindfulness and mental health. Any advice?",
-    "sleep": "I'm having trouble sleeping. Do you have any sleep hygiene tips?",
-    "wellness-trends": "What are the latest health and wellness trends of 2024?",
-    "brainstorm": "I need help brainstorming creative ideas for a project. Can you help me generate some innovative concepts?",
-    "learn": "I'd like to learn something new and interesting today. What topic do you recommend exploring?"
-  };
-  
   // Set up greeting based on time of day and handle initial loading
   useEffect(() => {
     const timeBasedGreeting = getGreeting();
@@ -355,7 +339,7 @@ export default function ChatiApp() {
   const renderMobileContent = () => {
     if (activeTab === "chat") {
       return showMobileChat ? (
-        <ChatComponent activeTopic={activeTopic} topicMessages={topicMessages} />
+        <ChatComponent activeTopic={activeTopic} />
       ) : (
         <MobileFeaturedTopics topics={featuredTopics} onTopicClick={handleTopicClick} />
       );
@@ -469,7 +453,7 @@ export default function ChatiApp() {
             <div className="h-full bg-white md:rounded-none">
               <div className="h-full">
                 {activeTab === "chat" && (
-                  <ChatComponent activeTopic={activeTopic} topicMessages={topicMessages} />
+                  <ChatComponent activeTopic={activeTopic} />
                 )}
                 {activeTab === "games" && <GamesComponent />}
                 {activeTab === "journal" && <JournalComponent />}
