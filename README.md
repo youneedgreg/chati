@@ -140,7 +140,6 @@ Would you like help with the backend logic or UI design for this? 🚀
 tablet ui
 mobile ui
 placeholder pictures
-navbar
 games corner
 log in sign up button
 perfomance vercel tweaks

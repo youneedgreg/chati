@@ -10,6 +10,11 @@ import { motion } from "framer-motion";
 import { ChatComponent, GamesComponent, JournalComponent, MoodTrackerComponent } from "./../components/components";
 import { Navbar } from "./../components/Navbar"; // Import the Navbar component
 
+// Define the interface for topicMessages to be passed to ChatComponent
+interface TopicMessages {
+  [key: string]: string;
+}
+
 type TabType = "chat" | "games" | "journal" | "mood-tracker";
 
 interface NavItemProps {
@@ -161,6 +166,57 @@ interface MobileFeaturedTopicsProps {
 const MobileFeaturedTopics = ({ topics, onTopicClick }: MobileFeaturedTopicsProps) => {
   return (
     <div className="p-4 pb-20 overflow-y-auto bg-gray-50">
+      {/* New Brainstorm and Learn Sections */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-medium text-gray-800">Quick Access</h2>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3">
+          {/* Brainstorm Ideas Section */}
+          <div 
+            className="relative rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow h-24"
+            onClick={() => onTopicClick('brainstorm')}
+          >
+            <div className="w-full h-full absolute inset-0">
+              <Image 
+                src="/api/placeholder/280/180" 
+                alt="Brainstorm Ideas" 
+                fill
+                sizes="(max-width: 768px) 50vw, 33vw"
+                className="object-cover"
+                priority={true}
+              />
+            </div>
+            <div className="absolute inset-0 bg-opacity-70 bg-yellow-500"></div>
+            <div className="absolute inset-0 p-4 flex flex-col justify-center items-center">
+              <h3 className="text-white font-bold text-center text-sm leading-tight">Brainstorm Ideas</h3>
+            </div>
+          </div>
+          
+          {/* Learn Something New Section */}
+          <div 
+            className="relative rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow h-24"
+            onClick={() => onTopicClick('learn')}
+          >
+            <div className="w-full h-full absolute inset-0">
+              <Image 
+                src="/api/placeholder/280/180" 
+                alt="Learn Something New" 
+                fill
+                sizes="(max-width: 768px) 50vw, 33vw"
+                className="object-cover"
+                priority={true}
+              />
+            </div>
+            <div className="absolute inset-0 bg-opacity-70 bg-emerald-500"></div>
+            <div className="absolute inset-0 p-4 flex flex-col justify-center items-center">
+              <h3 className="text-white font-bold text-center text-sm leading-tight">Learn Something New</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <h2 className="font-medium text-gray-800 mb-4">Featured Topics</h2>
       <div className="grid grid-cols-2 gap-3">
         {topics.map((topic) => (
@@ -179,11 +235,21 @@ const MobileFeaturedTopics = ({ topics, onTopicClick }: MobileFeaturedTopicsProp
 
 export default function ChatiApp() {
   const [activeTab, setActiveTab] = useState<TabType>("chat");
-  const [, setIsMobile] = useState<boolean>(false);
   const [activeTopic, setActiveTopic] = useState<string | undefined>();
   const [greeting, setGreeting] = useState<string>("");
   const [showMobileChat, setShowMobileChat] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  
+  // Define topicMessages for use with the ChatComponent
+  const topicMessages: TopicMessages = {
+    "anxiety": "I'd like to discuss managing anxiety in daily life.",
+    "procrastination": "I keep putting things off. Can you help me stop procrastinating?",
+    "plant-therapy": "I'm interested in using plants for mindfulness and mental health. Any advice?",
+    "sleep": "I'm having trouble sleeping. Do you have any sleep hygiene tips?",
+    "wellness-trends": "What are the latest health and wellness trends of 2024?",
+    "brainstorm": "I need help brainstorming creative ideas for a project. Can you help me generate some innovative concepts?",
+    "learn": "I'd like to learn something new and interesting today. What topic do you recommend exploring?"
+  };
   
   // Set up greeting based on time of day and handle initial loading
   useEffect(() => {
@@ -207,10 +273,15 @@ export default function ChatiApp() {
     };
   }, []);
   
-  // Check screen size on mount and when window resizes
+  // Check if we're on mobile for responsive display
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768); // Set breakpoint at md (768px)
+      const isMobileView = window.innerWidth < 768; // Set breakpoint at md (768px)
+      
+      // Only set showMobileChat to false if we're on mobile and it's currently true
+      if (isMobileView && showMobileChat && activeTab !== "chat") {
+        setShowMobileChat(false);
+      }
     };
     
     // Initial check
@@ -221,7 +292,7 @@ export default function ChatiApp() {
     
     // Cleanup
     return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
+  }, [activeTab, showMobileChat]);
 
   const navItems = [
     { id: "chat" as TabType, label: "Chat", icon: <MessageCircle className="h-5 w-5" /> },
@@ -284,7 +355,7 @@ export default function ChatiApp() {
   const renderMobileContent = () => {
     if (activeTab === "chat") {
       return showMobileChat ? (
-        <ChatComponent activeTopic={activeTopic} />
+        <ChatComponent activeTopic={activeTopic} topicMessages={topicMessages} />
       ) : (
         <MobileFeaturedTopics topics={featuredTopics} onTopicClick={handleTopicClick} />
       );
@@ -328,6 +399,55 @@ export default function ChatiApp() {
         
         {/* Featured Topics Section - visible only on larger screens */}
         <div className="hidden md:flex flex-col fixed left-64 top-16 bottom-0 w-64 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
+          {/* Quick Access Section */}
+          <div className="mb-6">
+            <h2 className="font-medium text-gray-800 mb-4">Quick Access</h2>
+            <div className="grid gap-3">
+              {/* Brainstorm Ideas Section */}
+              <div 
+                className="relative rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow h-24"
+                onClick={() => handleTopicClick('brainstorm')}
+              >
+                <div className="w-full h-full absolute inset-0">
+                  <Image 
+                    src="/api/placeholder/280/180" 
+                    alt="Brainstorm Ideas" 
+                    fill
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                    className="object-cover"
+                    priority={true}
+                  />
+                </div>
+                <div className="absolute inset-0 bg-opacity-70 bg-yellow-500"></div>
+                <div className="absolute inset-0 p-4 flex flex-col justify-center items-center">
+                  <h3 className="text-white font-bold text-center text-sm leading-tight">Brainstorm Ideas</h3>
+                </div>
+              </div>
+              
+              {/* Learn Something New Section */}
+              <div 
+                className="relative rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow h-24"
+                onClick={() => handleTopicClick('learn')}
+              >
+                <div className="w-full h-full absolute inset-0">
+                  <Image 
+                    src="/api/placeholder/280/180" 
+                    alt="Learn Something New" 
+                    fill
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                    className="object-cover"
+                    priority={true}
+                  />
+                </div>
+                <div className="absolute inset-0 bg-opacity-70 bg-emerald-500"></div>
+                <div className="absolute inset-0 p-4 flex flex-col justify-center items-center">
+                  <h3 className="text-white font-bold text-center text-sm leading-tight">Learn Something New</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Original Featured Topics */}
           <h2 className="font-medium text-gray-800 mb-4">Featured Topics</h2>
           <div className="grid gap-4">
             {featuredTopics.map((topic) => (
@@ -349,7 +469,7 @@ export default function ChatiApp() {
             <div className="h-full bg-white md:rounded-none">
               <div className="h-full">
                 {activeTab === "chat" && (
-                  <ChatComponent activeTopic={activeTopic} />
+                  <ChatComponent activeTopic={activeTopic} topicMessages={topicMessages} />
                 )}
                 {activeTab === "games" && <GamesComponent />}
                 {activeTab === "journal" && <JournalComponent />}
