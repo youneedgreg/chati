@@ -256,3 +256,7 @@ Peer Support Chat (Optional) – Allow students to share anonymous positive mess
 Shamiri Research Integration – A way for Shamiri to track students' mental wellness over time through anonymous data collection (with consent).
 
 Would you like a slide deck or a one-page pitch document to help present your idea? 🚀
+
+
+roadmap easy,actually
+dsa and  Cloud Computing and DevOps
