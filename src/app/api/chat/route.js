@@ -38,7 +38,8 @@ export async function POST(request) {
 
     // Call the Hugging Face Inference API
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
+      "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
+,
       {
         method: "POST",
         headers: {
